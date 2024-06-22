@@ -55,8 +55,8 @@ def search_users(args):
                     if partially_matched(user[param], args[param]):
                         if user not in results:
                             results.append(user)
-                            
-        results = sorted(results, key=lambda i: i['id'])
+
+        # results = sorted(results, key=lambda i: i['id'])
         return results
     else:
         return USERS
