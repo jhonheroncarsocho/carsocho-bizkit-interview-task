@@ -20,8 +20,16 @@ def match(match_id):
 
 
 def is_match(fave_numbers_1, fave_numbers_2):
-    '''Using set and intersection to effectively get all common numbers from fave_numbers_1 and fave_numbers_2.
-    Then return True if the length of common numbers equals fave_numbers_2'''
+    """
+    Check if all numbers in fave_numbers_2 are present in fave_numbers_1
+    
+    Parameters
+        fave_numbers_1 : list of user number 1 favorite numbers
+        fave_numbers_2 : list of user number 2 favorite numbers
+    
+    Returns
+        boolean : True if all numbers in fave_numbers_2 are present in fave_numbers_1, False otherwise
+    """
 
     common_num = list(set(fave_numbers_2) & set(fave_numbers_1))
 
