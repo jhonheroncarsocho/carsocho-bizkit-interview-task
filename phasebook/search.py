@@ -62,14 +62,18 @@ def search_users(args):
         return USERS
 
 def partially_matched(user_param, args_param):
-    """
-    Check if user_param and args_param is partial, case-insensitive match
+    """Check if user_param and args_param is partial, case-insensitive match
     
-    Parameters:
-        user_param (str): String value of user[param] that is to match to args[param]
-        args_param (str): String value of args[param] that is to match to user[param]
+    Parameters
+    ----------
+    user_param : str
+        String value of user[param] that is to match to args[param]
+    args_param : str
+        String value of args[param] that is to match to user[param]
     
-    Returns:
-        boolean: True if user_param and args_param is partial, case-insensitive match, False otherwise"""
+    Returns
+    -------
+    boolean 
+        True if user_param and args_param is partial, case-insensitive match, False otherwise"""
     
     return user_param.lower().find(args_param.lower()) != -1
