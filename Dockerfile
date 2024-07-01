@@ -13,6 +13,4 @@ COPY . /app
 
 EXPOSE 3000
 
-CMD ["flask", "--app", "phasebook", "add-dummy-data"]
-CMD ["flask", "--app", "phasebook", "add-dummy-friend-request"]
-CMD ["flask", "--app", "phasebook", "--debug", "run", "--host=0.0.0.0", "--port=3000"]
+CMD ["sh", "-c", "flask --app phasebook add-dummy-data && flask --app phasebook add-dummy-friend-request && flask --app phasebook --debug run --host=0.0.0.0 --port=3000"]
