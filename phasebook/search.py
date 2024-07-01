@@ -1,14 +1,16 @@
+# search.py
 from flask import Blueprint, request
-
-from .data.search_data import USERS
-
+from .model import Users
 
 bp = Blueprint("search", __name__, url_prefix="/search")
 
 
 @bp.route("")
 def search():
-    return search_users(request.args.to_dict()), 200
+    if bool(request.args.to_dict()):
+        return search_users(request.args.to_dict()), 200
+    else:
+        return "ERROR: invalid request", 400
 
 
 def search_users(args):
@@ -25,55 +27,49 @@ def search_users(args):
         a list of users that match the search parameters
     """
 
-    get_search_param = [key for key in args]
-    
-    if get_search_param:
-        results = []
-        for param in get_search_param:
-            if param == "id":
-                for user in USERS:
-                    if args[param] in user[param]:
-                        if user not in results:
-                            results.append(user)
-                
-            if param == "name":
-                for user in USERS:
-                    if partially_matched(user[param], args[param]):
-                        if user not in results:
-                            results.append(user)
+    results=[]
+    query = Users.query
 
-            if param == "age":
-                min_age = int(args[param]) - 1
-                max_age = int(args[param]) + 1
-                for user in USERS:
-                    if min_age <= user[param] <= max_age:
-                        if user not in results:
-                            results.append(user)
-            
-            if param == "occupation":
-                for user in USERS:
-                    if partially_matched(user[param], args[param]):
-                        if user not in results:
-                            results.append(user)
+    if "id" in args:
+        query_id = query.filter(Users.id == args["id"])
+        results = check_existence(results, query_id.all())
 
-        # results = sorted(results, key=lambda i: i['id'])
-        return results
-    else:
-        return USERS
+    if "name" in args:
+        query_name = query.filter(Users.name.ilike(f"%{args['name']}%"))
+        results = check_existence(results, query_name.all())
 
-def partially_matched(user_param, args_param):
-    """Check if user_param and args_param is partial, case-insensitive match
-    
-    Parameters
-    ----------
-    user_param : str
-        String value of user[param] that is to match to args[param]
-    args_param : str
-        String value of args[param] that is to match to user[param]
-    
-    Returns
-    -------
-    boolean 
-        True if user_param and args_param is partial, case-insensitive match, False otherwise"""
-    
-    return user_param.lower().find(args_param.lower()) != -1
+    if "age" in args:
+        min_age = int(args["age"]) - 1
+        max_age = int(args["age"]) + 1
+        query_age = query.filter(Users.age.between(min_age, max_age))
+        results = check_existence(results, query_age.all())
+
+    if "occupation" in args:
+        query_occu = query.filter(Users.occupation.ilike(f"%{args['occupation']}%"))
+        results = check_existence(results, query_occu.all())
+
+    return results
+
+def check_existence(results, query_results):
+    '''Check if the query results are already in the results list
+
+    Parameters:
+    -----------
+        results: list
+            a list of all queried User objects
+        query_results: list
+            a list of currently queried User objects
+
+    Returns:
+    --------
+    list
+        a list of dictionaries that are not already in the results list
+    '''
+
+    for user in query_results:
+        current_user = {"id": user.id, "name": user.name, "age": user.age, "occupation": user.occupation}
+        if current_user not in results:
+            print(current_user)
+            results.append(current_user)
+        
+    return results
