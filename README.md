@@ -39,14 +39,14 @@ Your first task is, of course, to set up the Phasebook repository on your local 
     ```
 
 6. Inject dummy accounts on the data base:
-  ```
-  flask --app phasebook add-dummy-data
-  ```
+    ```
+    flask --app phasebook add-dummy-data
+    ```
 
 7. Inject dummy friend requests on the data base:
-  ```
-  flask --app phasebook add-dummy-friend-request 
-  ```
+    ```
+    flask --app phasebook add-dummy-friend-request 
+    ```
 
 8. Run the application with the command:
     ```
