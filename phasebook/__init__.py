@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 from . import match, search, accept_friend, view_friend_requests, view_friends,\
-     inject_dummy_data, inject_dummy_friend_request, unfriend
+     inject_dummy_data, inject_dummy_friend_request, unfriend, create_account
 
 from .model import db
 
@@ -24,6 +24,7 @@ def create_app():
     app.register_blueprint(view_friends.bp)
     app.register_blueprint(view_friend_requests.bp)
     app.register_blueprint(unfriend.bp)
+    app.register_blueprint(create_account.bp)
 
     @app.cli.command('add-dummy-data')
     def inject_dummy_data_command():
